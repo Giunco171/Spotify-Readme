@@ -1,3 +1,9 @@
+```
+uv add spotapi --optional manual_track
+uv add websockets --optional manual_track
+uv sync --all-extras
+```
+
 <div align="center">
   <img src="Images/Spotify.svg" width="100" align="center">
   <h1>Spotify Readme</h1>

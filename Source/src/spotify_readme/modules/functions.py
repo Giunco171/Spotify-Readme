@@ -1,15 +1,15 @@
 from base64 import b64encode
 from random import randint
-from typing import Any, Dict, Union
+from typing import Any
 
 from flask import render_template, request
-from requests import get, post, Response
+from requests import Response, get, post
+from spotify_readme.modules.base64 import BASE_64
+from spotify_readme.modules.colors import COLORS
+from spotify_readme.modules.environment_variables import ENV_VARS
+from spotify_readme.modules.parsed_arguments import THEME, ParsedArgs
+from spotify_readme.modules.spot_api_wrapper import SpotApiWrapper
 from werkzeug.datastructures import MultiDict
-
-from app.modules.base64 import BASE_64
-from app.modules.colors import COLORS
-from app.modules.environment_variables import ENV_VARS
-from app.modules.parsed_arguments import THEME, ParsedArgs
 
 
 class SpotifyAPI:
@@ -32,7 +32,7 @@ class SpotifyAPI:
         response.raise_for_status()
         return response.json()["access_token"]
 
-    def make_request(self, endpoint: str) -> Dict[str, Any]:
+    def make_request(self, endpoint: str) -> dict[str, Any]:
         """Make a request to the specified Spotify endpoint."""
         token = self.get_token()
         response: Response = get(
@@ -80,21 +80,21 @@ class WidgetGenerator:
 
 def parse_request_args(request_args: MultiDict) -> ParsedArgs:
     """Parse the request args into a ParsedArgs object."""
-    parsed_request_args: Dict[str, Any] = ParsedArgs.parse_request_args(request_args)
+    parsed_request_args: dict[str, Any] = ParsedArgs.parse_request_args(request_args)
     return ParsedArgs(**parsed_request_args)
 
 
-def get_track(spotify_api: SpotifyAPI) -> Dict[str, Any]:
+def get_track(spotify_api: SpotifyAPI) -> dict[str, Any]:
     """Get the currently playing track."""
-    now_playing: Dict[str, Any] = spotify_api.make_request(
+    now_playing: dict[str, Any] = spotify_api.make_request(
         "me/player/currently-playing"
     )
-    recently_played: Dict[str, Any] = spotify_api.make_request(
+    recently_played: dict[str, Any] = spotify_api.make_request(
         "me/player/recently-played?limit=1"
     )
 
-    now_playing_track: Dict[str, Any] | None = now_playing.get("item")
-    recently_played_track: Dict[str, Any] = recently_played.get("items", [{}])[0].get(
+    now_playing_track: dict[str, Any] | None = now_playing.get("item")
+    recently_played_track: dict[str, Any] = recently_played.get("items", [{}])[0].get(
         "track"
     )
 
@@ -108,7 +108,7 @@ def get_base_64_placeholder_image(theme: THEME) -> str:
         return BASE_64.PLACEHOLDER_COVER_LIGHT
 
 
-def get_base_64_track_image(track: Dict[str, Any], theme: THEME) -> str:
+def get_base_64_track_image(track: dict[str, Any], theme: THEME) -> str:
     """Get the Base64 encoded image from a track."""
     images = track.get("album", {}).get("images", [])
     if images:
@@ -135,8 +135,8 @@ def get_base_64_scan_code(
 
 
 def prepare_template_variables(
-    parsed_args: ParsedArgs, spotify_api: SpotifyAPI
-) -> Dict[str, Union[str, bool]]:
+    track_id: str, parsed_args: ParsedArgs, spotify_api: SpotifyAPI
+) -> dict[str, str | bool]:
     eq_bars_html = WidgetGenerator.generate_eq_bars_html(
         parsed_args.bar_count, parsed_args.eq_color
     )
@@ -146,7 +146,22 @@ def prepare_template_variables(
     subtitle_color = f"#{parsed_args.subtitle_color}"
     background_color = f"#{parsed_args.main_background_color}"
 
-    if parsed_args.preview:
+    if not track_id:
+        track = get_track(spotify_api)
+        track_name = track.get("name", "Unknown Track")
+        track_artist = track.get("artists", [{}])[0].get("name", "Unknown Artist")
+        base_64_track_image = get_base_64_track_image(track, parsed_args.theme)
+        base_64_scan_code = (
+            get_base_64_scan_code(
+                track["uri"],
+                parsed_args.scan_color_background,
+                parsed_args.scan_color_foreground,
+                parsed_args.theme,
+            )
+            if parsed_args.scan
+            else ""
+        )
+    elif track_id == "preview":
         track_name = "Preview Song Name"
         track_artist = "Preview Artist"
         base_64_track_image = get_base_64_placeholder_image(parsed_args.theme)
@@ -156,10 +171,12 @@ def prepare_template_variables(
             else ""
         )
     else:
-        track = get_track(spotify_api)
-        track_name = track.get("name", "Unknown Track")
-        track_artist = track.get("artists", [{}])[0].get("name", "Unknown Artist")
-        base_64_track_image = get_base_64_track_image(track)
+        track = SpotApiWrapper.get_track(track_id)
+        track_name = track["name"]
+        track_artist = track["first_artist"]
+        base_64_track_image = ImageLoader.load_base_64_image_from_url(
+            track["cover_art_url"]
+        )
         base_64_scan_code = (
             get_base_64_scan_code(
                 track["uri"],
@@ -185,7 +202,7 @@ def prepare_template_variables(
     }
 
 
-def make_svg_widget() -> str:
+def make_svg_widget(track_id: str) -> str:
     """Returns the HTML of the widget to be rendered."""
     parsed_args = parse_request_args(request.args)
     spotify_api = SpotifyAPI(
@@ -193,7 +210,7 @@ def make_svg_widget() -> str:
         client_secret=ENV_VARS.CLIENT_SECRET,
         refresh_token=ENV_VARS.REFRESH_TOKEN,
     )
-    template_variables = prepare_template_variables(parsed_args, spotify_api)
+    template_variables = prepare_template_variables(track_id, parsed_args, spotify_api)
     return render_template("widget.html", **template_variables)
 
 

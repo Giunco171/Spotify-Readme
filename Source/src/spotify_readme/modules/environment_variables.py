@@ -1,8 +1,7 @@
 from os import getenv
 
 from dotenv import load_dotenv
-
-from app.modules.paths import PATHS
+from spotify_readme.modules.paths import PATHS
 
 
 class ENV_VARS:
@@ -13,4 +12,4 @@ class ENV_VARS:
     CLIENT_SECRET: str | None = getenv("CLIENT_SECRET")
 
     if not all({REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET}):
-        raise EnvironmentError("Error obtaining required environment variables.")
+        raise OSError("Error obtaining required environment variables.")

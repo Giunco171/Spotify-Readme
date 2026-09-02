@@ -1,10 +1,10 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable
+from typing import Any
 
+from spotify_readme.modules.colors import COLORS
 from werkzeug.datastructures import MultiDict
-
-from app.modules.colors import COLORS
 
 
 class THEME(Enum):
@@ -20,7 +20,6 @@ class CONSTANTS:
 
 @dataclass(frozen=True)
 class ParsedArgs:
-    preview: bool = False
     spin: bool = False
     scan: bool = False
     theme: THEME = THEME.LIGHT
@@ -77,7 +76,6 @@ class ParsedArgs:
     def parse_request_args(request_args: MultiDict) -> dict[str, Any]:
         get_param: Callable = request_args.get
         return {
-            "preview": ParsedArgs.is_truhty(get_param("preview", "false", type=str)),
             "spin": ParsedArgs.is_truhty(get_param("spin", "false", type=str)),
             "scan": ParsedArgs.is_truhty(get_param("scan", "false", type=str)),
             "theme": THEME(get_param("theme", THEME.LIGHT.value, type=str)),
@@ -86,24 +84,19 @@ class ParsedArgs:
         }
 
     def __post_init__(self) -> None:
-        self._validate_preview()
         self._validate_spin()
         self._validate_scan()
         self._validate_theme()
         self._validate_eq_color()
         self._validate_width()
 
-    def _validate_preview(self) -> None:
-        if not isinstance(self.preview, bool):
-            raise ValueError("`preview` must be of type `bool`.")
-
     def _validate_spin(self) -> None:
         if not isinstance(self.spin, bool):
-            raise ValueError("`spin` must be of type `bool`.")
+            raise TypeError("`spin` must be of type `bool`.")
 
     def _validate_scan(self) -> None:
         if not isinstance(self.scan, bool):
-            raise ValueError("`scan` must be of type `bool`.")
+            raise TypeError("`scan` must be of type `bool`.")
 
     def _validate_theme(self) -> None:
         if self.theme not in THEME:
@@ -111,7 +104,7 @@ class ParsedArgs:
 
     def _validate_eq_color(self) -> None:
         if not isinstance(self.eq_color, str):
-            raise ValueError("`eq_color` must be of type `str`.")
+            raise TypeError("`eq_color` must be of type `str`.")
         if (
             self.eq_color != "rainbow"
             and len(self.eq_color) != CONSTANTS.HEX_CODE_LENGTH
@@ -122,7 +115,7 @@ class ParsedArgs:
 
     def _validate_width(self) -> None:
         if not isinstance(self.width, int):
-            raise ValueError("`width`must be of type `int`.")
+            raise TypeError("`width`must be of type `int`.")
         if not (CONSTANTS.MIN_WIDGET_WIDTH <= self.width <= CONSTANTS.MAX_WIDGET_WIDTH):
             raise ValueError(
                 f"Width must be ∈ [{CONSTANTS.MIN_WIDGET_WIDTH}, {CONSTANTS.MAX_WIDGET_WIDTH}]."

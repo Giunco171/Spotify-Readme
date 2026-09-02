@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from app.modules.paths import PATHS
+from spotify_readme.modules.paths import PATHS
 
 
 class BASE_64:
-    BASE_64_FOLDER: Path = PATHS.ROOT_DIRECTORY / "app" / "static" / "base64"
+    BASE_64_FOLDER: Path = PATHS.SRC_DIRECTORY / "spotify_readme" / "static" / "base64"
 
     with open(BASE_64_FOLDER / "spotify_logo.txt") as f:
         SPOTIFY_LOGO: str = f.read()
