@@ -28,6 +28,10 @@ class SpotApiWrapper:
 
     @classmethod
     def read_cache(cls) -> dict[str, TrackDetails]:
+        if not cls.cache_file.exists():
+            cls.cache_file.parent.mkdir(parents=True, exist_ok=True)
+            cls.cache_file.touch()
+            cls.cache_file.write_text("{}")
         with open(cls.cache_file, "r") as f:
             cache: dict[str, TrackDetails] = json.load(f)
             return cache

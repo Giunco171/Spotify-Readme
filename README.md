@@ -1,9 +1,3 @@
-```
-uv add spotapi --optional manual_track
-uv add websockets --optional manual_track
-uv sync --all-extras
-```
-
 <div align="center">
   <img src="Images/Spotify.svg" width="100" align="center">
   <h1>Spotify Readme</h1>
@@ -143,13 +137,13 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
 - <a href="https://github.com/tthn0/Spotify-Readme/fork">Fork</a> this repository. The new forked repository will be at `https://github.com/{GITHUB_USERNAME}/Spotify-Readme`, where `{GITHUB_USERNAME}` is your GitHub username.
 - Head over to <a href="https://www.pythonanywhere.com/pricing/">PythonAnywhere</a>, and `Create a Beginner Account` if you don't already have one. Take note of your username. We'll call this `{PA_USERNAME}`.
   - Complete the PythonAnywhere tour if you'd like to (or skip it).
-  - Under `New console:`, click on the `Bash` option.
+  - Under `New console:`, click on the `$ Bash` option.
   - Run the following commands:
 
     ```bash
     git clone https://github.com/{GITHUB_USERNAME}/Spotify-Readme
-    mkvirtualenv --python=/usr/bin/python3.10 venv
-    pip install -r Spotify-Readme/Source/requirements.txt
+    mkvirtualenv --python=/usr/bin/python3.10 .venv
+    pip install -r "Spotify-Readme/Source/requirements.txt"
     nano Spotify-Readme/Source/.env
     ```
 
@@ -180,23 +174,23 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
     - Click `Next »`.
 
   - Scroll down to the `Code` section.
-    - Change the `Source code` field to `/home/{PA_USERNAME}/Spotify-Readme/Source`.
+    - Change the `Source code` field to `/home/{PA_USERNAME}/Spotify-Readme/Source/src`.
     - Open the `WSGI configuration file` in a new tab and add the following to the bottom of the file:
 
       ```python
       import sys
 
-      path = '/home/{PA_USERNAME}/Spotify-Readme/Source'
+      path = '/home/{PA_USERNAME}/Spotify-Readme/Source/src'
       if path not in sys.path:
           sys.path.append(path)
 
-      from main import app as application
+      from spotify_readme import app as application
       ```
 
     - Click `Save` and close out the tab.
 
   - Back on the `Web` tab, click `Enter path to a virtualenv, if desired`.
-    - Type `venv` and click the check mark.
+    - Type `.venv` and click the check mark.
     - This should automatically fill in the field with the correct path to the virtual environment we created earlier.
   - Enable `Force HTTPS`.
   - Scroll back up to the top of the page.
@@ -243,7 +237,7 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
 - In any markdown file, add the following code:
 
   ```html
-  <a href="https://{PA_USERNAME}.pythonanywhere.com/link">
+  <a href="https://github.com/tthn0/Spotify-Readme">
     <img
       src="https://{PA_USERNAME}.pythonanywhere.com"
       alt="Current Spotify Song"

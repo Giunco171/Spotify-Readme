@@ -1,18 +1,21 @@
 [project]
 name = "spotify_readme"
 version = "0.1.0"
-description = "Add your description here"
+description = "Spotify Readme"
 authors = [
     { name = "Thomas ☻", email = "53582981+tthn0@users.noreply.github.com" },
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = ["flask>=3.1.3", "python-dotenv>=1.2.3", "requests>=2.34.2"]
 
 [project.scripts]
 start = "spotify_readme:main"
 
 [project.optional-dependencies]
-manual-track = ["spotapi>=1.2.8", "websockets>=17.1"]
+manual-track = [
+    "spotapi>=1.2.8",
+    "websockets>=16.1.1",
+]
 
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]

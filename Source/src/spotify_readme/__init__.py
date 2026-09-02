@@ -32,7 +32,7 @@ def create_app() -> Flask:
     return app
 
 
-app: Flask = create_app()
+app: Flask = create_app()  # Created in global scope for PythonAnywhere
 
 
 def main() -> None:
