@@ -8,7 +8,7 @@ from spotify_readme.modules.base64 import BASE_64
 from spotify_readme.modules.colors import COLORS
 from spotify_readme.modules.environment_variables import ENV_VARS
 from spotify_readme.modules.parsed_arguments import THEME, ParsedArgs
-from spotify_readme.modules.spot_api_wrapper import SpotApiWrapper
+from spotify_readme.modules.spotify_scraper import SpotifyScraper
 from werkzeug.datastructures import MultiDict
 
 
@@ -59,8 +59,12 @@ class WidgetGenerator:
     def generate_eq_bars_html(bar_count: int, eq_color: str) -> str:
         """Build the HTML/CSS snippets for the equalizer bars to be injected."""
         css: str = ""
+
         if eq_color == "rainbow":
             css += ".bar-container { animation-duration: 2s; }"
+        elif eq_color == "auto":
+            pass  # TODO: implement auto color using `spotifyscraper` package
+
         for i in range(bar_count):
             random_duration: int = randint(500, 750)
             background_color: str = (
@@ -70,8 +74,10 @@ class WidgetGenerator:
                 animation-duration: {random_duration}ms;
                 background: #{background_color};
             }}"""
+
         bar_html: str = "<div class='bar'></div>"
         eq_bars_html: str = "".join([bar_html for _ in range(bar_count)])
+
         return f"""
             {eq_bars_html}
             <style>{css}</style>
@@ -171,11 +177,13 @@ def prepare_template_variables(
             else ""
         )
     else:
-        track = SpotApiWrapper.get_track(track_id)
+        track = SpotifyScraper.get_track(track_id)
         track_name = track["name"]
         track_artist = track["first_artist"]
-        base_64_track_image = ImageLoader.load_base_64_image_from_url(
-            track["cover_art_url"]
+        base_64_track_image = (
+            ImageLoader.load_base_64_image_from_url(track["cover_art_url"])
+            if track["cover_art_url"]
+            else get_base_64_placeholder_image(parsed_args.theme)
         )
         base_64_scan_code = (
             get_base_64_scan_code(

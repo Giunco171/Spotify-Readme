@@ -20,60 +20,60 @@
 /
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true)
+![Preview](https://tthn.pythonanywhere.com/preview)
 
 #### Spinning CD Effect
 
 ```
-?spin=true
+/?spin=true
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&spin=true)
+![Preview](https://tthn.pythonanywhere.com/5hGC7vIGNmFPK9sk9A1x5i?spin=true)
 
 #### Include Scan Code
 
 ```
-?scan=true
+/?scan=true
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&scan=true)
+![Preview](https://tthn.pythonanywhere.com/7EQjPEL70tzjlTgCgU0QrV?scan=true)
 
 #### Dark Theme
 
 ```
-?theme=dark
+/?theme=dark
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&theme=dark)
+![Preview](https://tthn.pythonanywhere.com/3nHuKdFJZm78CoeBnDcFKe?theme=dark)
 
 #### Custom Equalizer
 
 ```
-?eq_color=0995e0
+/?eq_color=0995e0
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&eq_color=0995e0)
+![Preview](https://tthn.pythonanywhere.com/5IgjP7X4th6nMNDh4akUHb?eq_color=0995e0)
 
 #### Rainbow Equalizer
 
 ```
-?eq_color=rainbow
+/?eq_color=rainbow
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&eq_color=rainbow)
+![Preview](https://tthn.pythonanywhere.com/6P4d1NWBCNIYZjzF9k1mVN?eq_color=rainbow)
 
 #### Combination
 
 ```
-?spin=true&scan=true&eq_color=rainbow&theme=dark
+/?spin=true&scan=true&eq_color=rainbow&theme=dark
 ```
 
-![Preview](https://tthn.pythonanywhere.com/?preview=true&spin=true&scan=true&eq_color=rainbow&theme=dark)
+![Preview](https://tthn.pythonanywhere.com/53iuhJlwXhSER5J2IYYv1W?spin=true&scan=true&eq_color=rainbow&theme=dark)
 
 ## Setup/Deployment
 
 > [!WARNING]  
-> Spotify rolled out significant restrictions to its API on February 11th, 2026. To be able to display your currently playing song live, you must have a Spotify Premium account.
+> Spotify rolled out significant restrictions to its API on February 11th, 2026. To be able to display your currently playing song live, you must have a Spotify Premium account. Otherwise, you can manually add a static song without live syncing ([more details](#customization)).
 
 > [!NOTE]  
 > This guide was last updated on Jul 31, 2026. The steps might differ slightly in the future if Spotify or PythonAnywhere update their website interfaces.
@@ -174,7 +174,7 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
     - Click `Next »`.
 
   - Scroll down to the `Code` section.
-    - Change the `Source code` field to `/home/{PA_USERNAME}/Spotify-Readme/Source/src`.
+    - Change both the `Source code` and `Working directory` fields to `/home/{PA_USERNAME}/Spotify-Readme/Source/src`.
     - Open the `WSGI configuration file` in a new tab and add the following to the bottom of the file:
 
       ```python
@@ -184,7 +184,7 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
       if path not in sys.path:
           sys.path.append(path)
 
-      from spotify_readme import app as application
+      from main import app as application
       ```
 
     - Click `Save` and close out the tab.
@@ -246,13 +246,21 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
   ```
 
 - Of course, you can append query parameters to the URL to customize the widget!
-- Please leave the anchor tag hyperlink reference if you'd to be able to dynamically link your current song, so people listen to the preview. Also, the link helps to retain creator credit and helps others find this project!
+- Please leave the anchor tag hyperlink to retain creator credit and help others find this project!
 
 ## Customization
 
-<p>
-  To customize the widget, add query parameters to the endpoint. There are many possible combinations! See how it pairs with other widgets on <a href="https://github.com/tthn0/tthn0">my own README</a>!
-</p>
+<ul>
+  <li>
+    To customize the widget, simply add query parameters to the endpoint. There are many possible combinations! 
+  </li>
+  <li>
+    The default endpoint will just be <code>https://{PA_USERNAME}.pythonanywhere.com</code>, which will display the song you're currently playing or your most recently played song.
+  </li>
+  <li>
+    The if you want to force a song to constantly be displayed instead of syncing live with your Spotify, append the song's track ID at the end like this: <code>https://{PA_USERNAME}.pythonanywhere.com/{TRACK_ID}</code>.
+  </li>
+</ul>
 
 | Parameter  | Default  | Values                                 |
 | :--------- | :------- | :------------------------------------- |
