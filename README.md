@@ -183,7 +183,7 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
       path = '/home/Giunco171/Spotify-Readme/Source/src'
 
       if path not in sys.path:
-        sys.path.insert(0, path)
+          sys.path.insert(0, path)
 
       from spotify_readme.main import app as application
       ```
