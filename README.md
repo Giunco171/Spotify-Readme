@@ -180,11 +180,12 @@ https://accounts.spotify.com/authorize?client_id={CLIENT_ID}&response_type=code&
       ```python
       import sys
 
-      path = '/home/{PA_USERNAME}/Spotify-Readme/Source/src'
-      if path not in sys.path:
-          sys.path.append(path)
+      path = '/home/Giunco171/Spotify-Readme/Source/src'
 
-      from main import app as application
+      if path not in sys.path:
+        sys.path.insert(0, path)
+
+      from spotify_readme.main import app as application
       ```
 
     - Click `Save` and close out the tab.
