@@ -20,7 +20,7 @@
 /
 ```
 
-![Preview](https://tthn.pythonanywhere.com/preview)
+![Preview](https://Giunco171.pythonanywhere.com/preview)
 
 #### Spinning CD Effect
 
@@ -28,7 +28,7 @@
 /?spin=true
 ```
 
-![Preview](https://tthn.pythonanywhere.com/5hGC7vIGNmFPK9sk9A1x5i?spin=true)
+![Preview](https://Giunco171.pythonanywhere.com/5hGC7vIGNmFPK9sk9A1x5i?spin=true)
 
 #### Include Scan Code
 
@@ -36,7 +36,7 @@
 /?scan=true
 ```
 
-![Preview](https://tthn.pythonanywhere.com/7EQjPEL70tzjlTgCgU0QrV?scan=true)
+![Preview](https://Giunco171.pythonanywhere.com/7EQjPEL70tzjlTgCgU0QrV?scan=true)
 
 #### Dark Theme
 
@@ -44,7 +44,7 @@
 /?theme=dark
 ```
 
-![Preview](https://tthn.pythonanywhere.com/3nHuKdFJZm78CoeBnDcFKe?theme=dark)
+![Preview](https://Giunco171.pythonanywhere.com/3nHuKdFJZm78CoeBnDcFKe?theme=dark)
 
 #### Custom Equalizer
 
@@ -52,7 +52,7 @@
 /?eq_color=0995e0
 ```
 
-![Preview](https://tthn.pythonanywhere.com/5IgjP7X4th6nMNDh4akUHb?eq_color=0995e0)
+![Preview](https://Giunco171.pythonanywhere.com/5IgjP7X4th6nMNDh4akUHb?eq_color=0995e0)
 
 #### Rainbow Equalizer
 
@@ -60,7 +60,7 @@
 /?eq_color=rainbow
 ```
 
-![Preview](https://tthn.pythonanywhere.com/6P4d1NWBCNIYZjzF9k1mVN?eq_color=rainbow)
+![Preview](https://Giunco171.pythonanywhere.com/6P4d1NWBCNIYZjzF9k1mVN?eq_color=rainbow)
 
 #### Combination
 
@@ -68,7 +68,7 @@
 /?spin=true&scan=true&eq_color=rainbow&theme=dark
 ```
 
-![Preview](https://tthn.pythonanywhere.com/53iuhJlwXhSER5J2IYYv1W?spin=true&scan=true&eq_color=rainbow&theme=dark)
+![Preview](https://Giunco171.pythonanywhere.com/53iuhJlwXhSER5J2IYYv1W?spin=true&scan=true&eq_color=rainbow&theme=dark)
 
 ## Setup/Deployment
 
