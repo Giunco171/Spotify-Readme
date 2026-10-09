@@ -60,7 +60,7 @@
 /?eq_color=rainbow
 ```
 
-![Preview](https://Giunco171.pythonanywhere.com/6P4d1NWBCNIYZjzF9k1mVN?eq_color=rainbow)
+![Preview](https://tthn.pythonanywhere.com/6P4d1NWBCNIYZjzF9k1mVN?eq_color=rainbow)
 
 #### Combination
 
